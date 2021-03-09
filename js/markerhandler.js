@@ -63,7 +63,7 @@ AFRAME.registerComponent("markerhandler", {
       buttonDiv.style.display = "flex";
 
       var orderButtton = document.getElementById("order-button");
-      var orderSummeryButtton = document.getElementById("order-summery-button");
+      var orderSummaryButtton = document.getElementById("order-summary-button");
       var payButton = document.getElementById("pay-button");
 
       // Handling Click Events
@@ -80,8 +80,8 @@ AFRAME.registerComponent("markerhandler", {
         });
       });
 
-      orderSummeryButtton.addEventListener("click", () =>
-        this.handleOrderSummery()
+      orderSummaryButtton.addEventListener("click", () =>
+        this.handleOrderSummary()
       );
 
       payButton.addEventListener("click", () => this.handlePayment());
@@ -151,7 +151,7 @@ AFRAME.registerComponent("markerhandler", {
           .update(details);
       });
   },
-  getOrderSummery: async function(uid) {
+  getorderSummary: async function(uid) {
     return await firebase
       .firestore()
       .collection("users")
@@ -159,21 +159,21 @@ AFRAME.registerComponent("markerhandler", {
       .get()
       .then(doc => doc.data());
   },
-  handleOrderSummery: async function() {
+  handleOrderSummary: async function() {
     // Changing modal div visibility
     var modalDiv = document.getElementById("modal-div");
     modalDiv.style.display = "flex";
     // Getting UID
     uid = uid.toUpperCase();
 
-    // Getting Order Summery from database
-    var orderSummery = await this.getOrderSummery(uid);
+    // Getting Order summary from database
+    var orderSummary = await this.getorderSummary(uid);
 
     var tableBodyTag = document.getElementById("bill-table-body");
     // Removing old tr data
     tableBodyTag.innerHTML = "";
 
-    var currentOrders = Object.keys(orderSummery.current_orders);
+    var currentOrders = Object.keys(orderSummary.current_orders);
     currentOrders.map(i => {
       var tr = document.createElement("tr");
       var item = document.createElement("td");
@@ -181,14 +181,14 @@ AFRAME.registerComponent("markerhandler", {
       var quantity = document.createElement("td");
       var subtotal = document.createElement("td");
 
-      item.innerHTML = orderSummery.current_orders[i].item;
-      price.innerHTML = "$" + orderSummery.current_orders[i].price;
+      item.innerHTML = orderSummary.current_orders[i].item;
+      price.innerHTML = "$" + orderSummary.current_orders[i].price;
       price.setAttribute("class", "text-center");
 
-      quantity.innerHTML = orderSummery.current_orders[i].quantity;
+      quantity.innerHTML = orderSummary.current_orders[i].quantity;
       quantity.setAttribute("class", "text-center");
 
-      subtotal.innerHTML = "$" + orderSummery.current_orders[i].subtotal;
+      subtotal.innerHTML = "$" + orderSummary.current_orders[i].subtotal;
       subtotal.setAttribute("class", "text-center");
 
       tr.appendChild(item);
@@ -215,7 +215,7 @@ AFRAME.registerComponent("markerhandler", {
 
     var td4 = document.createElement("td");
     td1.setAttribute("class", "no-line text-right");
-    td4.innerHTML = "₹" + orderSummery.total_bill;
+    td4.innerHTML = "₹" + orderSummary.total_bill;
 
     totalTr.appendChild(td1);
     totalTr.appendChild(td2);
