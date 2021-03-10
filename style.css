@@ -9,7 +9,7 @@ button {
 #button-div {
   display: none;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   position: fixed;
   bottom: 10px;
   width:100%;
@@ -46,6 +46,7 @@ button {
   border: 1px solid #888;
   width: 100%;
 }
+
 
 
 .rating-modal {

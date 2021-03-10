@@ -35,23 +35,9 @@ AFRAME.registerComponent("markerhandler", {
       var model = document.querySelector(`#model-${toy.id}`);
       model.setAttribute("visible", true);
 
-      // make description Container visible
-      var descriptionContainer = document.querySelector(
-        `#main-plane-${toy.id}`
-      );
-      descriptionContainer.setAttribute("visible", true);
-
-      // make Price Plane visible
-      var pricePlane = document.querySelector(`#price-plane-${toy.id}`);
-      pricePlane.setAttribute("visible", true);
-
-      // make Rating Plane visible
-      var ratingPlane = document.querySelector(`#rating-plane-${toy.id}`);
-      ratingPlane.setAttribute("visible", true);
-
-      // make review Plane visible
-      var reviewPlane = document.querySelector(`#review-plane-${toy.id}`);
-      reviewPlane.setAttribute("visible", true);
+      // make plane Container visible
+      var mainPlane = document.querySelector(`#main-plane-${toy.id}`);
+      mainPlane.setAttribute("visible", true);
 
       var model = document.querySelector(`#model-${toy.id}`);
       model.setAttribute("position", toy.model_geometry.position);
@@ -65,6 +51,7 @@ AFRAME.registerComponent("markerhandler", {
       var orderButtton = document.getElementById("order-button");
       var orderSummaryButtton = document.getElementById("order-summary-button");
       var payButton = document.getElementById("pay-button");
+      var ratingButton = document.getElementById("rating-button");
 
       // Handling Click Events
       orderButtton.addEventListener("click", () => {
@@ -74,7 +61,7 @@ AFRAME.registerComponent("markerhandler", {
         swal({
           icon: "https://i.imgur.com/4NZ6uLY.jpg",
           title: "Thanks For Order !",
-          text: "Your order will serve soon on your table!",
+          text: "  ",
           timer: 2000,
           buttons: false
         });
@@ -85,6 +72,8 @@ AFRAME.registerComponent("markerhandler", {
       );
 
       payButton.addEventListener("click", () => this.handlePayment());
+
+      ratingButton.addEventListener("click", () => this.handleRatings(toy));
     }
   },
   askUserId: function() {
@@ -215,7 +204,7 @@ AFRAME.registerComponent("markerhandler", {
 
     var td4 = document.createElement("td");
     td1.setAttribute("class", "no-line text-right");
-    td4.innerHTML = "₹" + orderSummary.total_bill;
+    td4.innerHTML = "$" + orderSummary.total_bill;
 
     totalTr.appendChild(td1);
     totalTr.appendChild(td2);
@@ -249,6 +238,35 @@ AFRAME.registerComponent("markerhandler", {
           buttons: false
         });
       });
+  },
+
+  handleRatings: function(toy) {
+    // Close Modal
+    document.getElementById("rating-modal-div").style.display = "flex";
+    document.getElementById("rating-input").value = "0";
+
+    var saveRatingButton = document.getElementById("save-rating-button");
+    saveRatingButton.addEventListener("click", () => {
+      document.getElementById("rating-modal-div").style.display = "none";
+      var rating = document.getElementById("rating-input").value;
+
+      firebase
+        .firestore()
+        .collection("toys")
+        .doc(toy.id)
+        .update({
+          rating: rating
+        })
+        .then(() => {
+          swal({
+            icon: "success",
+            title: "Thanks For Rating!",
+            text: "We Hope You Like Toy !!",
+            timer: 2500,
+            buttons: false
+          });
+        });
+    });
   },
   handleMarkerLost: function() {
     // Changing button div visibility
