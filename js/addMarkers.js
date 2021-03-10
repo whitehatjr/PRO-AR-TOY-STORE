@@ -71,7 +71,7 @@ AFRAME.registerComponent("createmarkers", {
         description.setAttribute("position", { x: 0.04, y: 0.05, z: 0.1 });
         description.setAttribute("rotation", { x: 0, y: 0, z: 0 });
         description.setAttribute("text", {
-          font: "kelsonsans",
+          font: "dejavu",
           color: "black",
           width: 2,
           height: 5,
